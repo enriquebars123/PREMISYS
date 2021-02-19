@@ -1,0 +1,18 @@
+http GET http://localhost:9001/api/v1/employeeTourniquets/?fechaIni=2018/04/20%2010:46:36&fechaFin=2018/05/20%2014:30:00&codeEmp=5142
+
+http GET http://localhost:8000/api/v1/employeeTourniquets/?fechaIni=2018/04/20%2010:46:36&fechaFin=2018/05/20%2014:30:00&codeEmp=5142
+
+
+http GET http://localhost:9001/api/v1/employeeTourniquets/ \
+fechaIni=2018/04/20 \
+fechaFin=2018/05/20 \
+codeEmp=5142
+
+http GET http://localhost:8000/api/v1/employeeTourniquets/ \
+fechaIni=2018/04/20 \
+fechaFin=2018/05/20 \
+codeEmp=5142
+
+
+
+http://172.16.100.188:9201/api/v1/employeeTourniquets/?fechaIni=2018/04/20%2010:46:36&fechaFin=2018/05/20%2014:30:00&codeEmp=5142

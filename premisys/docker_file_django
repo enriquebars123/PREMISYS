@@ -1,0 +1,49 @@
+FROM ubuntu:18.04
+RUN apt-get update 
+RUN apt-get install -y python-dev libldap2-dev libsasl2-dev libssl-dev
+
+RUN apt-get install -y python3
+RUN apt-get install -y python3-pip
+
+RUN apt-get install unixodbc -y \
+&& apt-get install unixodbc-dev -y \
+&& apt-get install freetds-dev -y \
+&& apt-get install freetds-bin -y \
+&& apt-get install tdsodbc -y \
+&& apt-get install --reinstall build-essential -y
+
+#populate "ocbcinst.ini"
+RUN echo "[FreeTDS]\n\
+Description = FreeTDS unixODBC Driver\n\
+Driver = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so\n\
+Setup = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so" >> /etc/odbcinst.ini
+
+
+# Copiar proyecto dentro del contenedor
+WORKDIR /backend
+COPY . /backend
+
+# Da el permiso de ejecucion al scrip que se va programar
+RUN chmod +x /backend/proceso.sh
+
+# Instalar librerias
+RUN pip3 install -r /backend/requirements.txt; exit 0
+
+# VARIABLES DE ENTORNO CONFIGURACIÓN DE GUNICORN.
+ENV NAME backend
+ENV DJANGODIR /backend
+ENV USER root
+ENV GROUP root
+ENV NUM_WORKERS 5
+ENV DJANGO_SETTINGS_MODULE premisys.settings
+ENV DJANGO_WSGI_MODULE premisys.wsgi
+ENV PYTHONPATH $DJANGODIR
+
+CMD exec gunicorn  ${DJANGO_WSGI_MODULE}:application \
+--name $NAME \
+--workers $NUM_WORKERS \
+--user=$USER --group=$GROUP \
+-b :8000 \
+--log-level=debug \
+--log-file=-
+

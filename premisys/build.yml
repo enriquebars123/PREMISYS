@@ -1,0 +1,19 @@
+version: '3.1'
+services:
+  gunicorn:
+    build:
+       context: ./
+       dockerfile: docker_file_django
+    container_name: premisysdjgunicorn
+    ports:
+      - '9201:8000'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+    restart: always
+
+
+# Ejecutar
+# sudo docker-compose -f build.yml up -d gunicorn
+
